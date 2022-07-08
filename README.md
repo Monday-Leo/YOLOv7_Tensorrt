@@ -1,6 +1,6 @@
 ## B站教学视频
 
-Coming soon
+https://www.bilibili.com/video/BV1q34y1n7Bw/
 
 ## Introduction
 
