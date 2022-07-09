@@ -1,7 +1,7 @@
 import cv2
+import tensorrt as trt
 import torch
 import numpy as np
-import tensorrt as trt
 from collections import OrderedDict,namedtuple
 
 class TRT_engine():
@@ -57,13 +57,11 @@ class TRT_engine():
 
     def preprocess(self,image):
         self.img,self.r,self.dw,self.dh = self.letterbox(image)
-        self.img = cv2.cvtColor(self.img,cv2.COLOR_BGR2RGB)
         self.img = self.img.transpose((2, 0, 1))
         self.img = np.expand_dims(self.img,0)
         self.img = np.ascontiguousarray(self.img)
         self.img = torch.from_numpy(self.img).to(self.device)
         self.img = self.img.float()
-        self.img /= 255.
         return self.img
 
     def predict(self,img,threshold):
@@ -98,9 +96,9 @@ def visualize(img,bbox_array):
         img = cv2.putText(img, "class:"+str(clas)+" "+str(round(score,2)), (xmin,int(ymin)-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (105, 237, 249), 1)
     return img
 
-trt_engine = TRT_engine("./trt_model/yolov7_fp16.engine")
-img1 = cv2.imread("./pictures/zidane.jpg")
-results = trt_engine.predict(img1,threshold=0.5)
-img = visualize(img1,results)
+trt_engine = TRT_engine("./trt_model/yolov7_tiny_fp16.engine")
+img = cv2.imread("./pictures/zidane.jpg")
+results = trt_engine.predict(img,threshold=0.5)
+img = visualize(img,results)
 cv2.imshow("img",img)
 cv2.waitKey(0)

@@ -87,6 +87,8 @@ class End2End(nn.Module):
         self.end2end.eval()
 
     def forward(self, x):
+        x = x[:,[2,1,0],...]
+        x = x * (1/255)
         x = self.model(x)[0]
         x = self.end2end(x)
         return x
